@@ -40,7 +40,7 @@ case "$THEME" in
 		color14 ${kolors[8]}
 		color15 ${kolors[9]} 
 EOF
-    echo "exec = swww img $HOME/wall/$chose -t center" >~/.local/share/themes/"$3"/hypr/wall.conf
+    echo "exec = swww img $chose -t center" >~/.local/share/themes/"$3"/hypr/wall.conf
   fi
   ;;
 "help")
