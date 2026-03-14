@@ -1,0 +1,4 @@
+#!/bin/bash
+
+area=$(magick "$1" -format "%[fx:w*h]" info:)
+magick "$1" -alpha off -kmeans 10 -format "%c" histogram:info: | sed 's/://g' | awk -v area=$area '{print $3}' | sed 's/ *//g' | sort -nr -k1,1 -t ","

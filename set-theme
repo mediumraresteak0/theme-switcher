@@ -1,0 +1,67 @@
+#!/bin/bash
+
+THEME="$1"
+DIR="$HOME/.local/share/themes"
+
+case "$THEME" in
+"ls")
+  echo "Available Themes:"
+  ls $DIR | sort
+  ;;
+"make")
+  chose="$2"
+  kolors=($(color-get "$chose"))
+  mkdir -p ~/.local/share/themes/"$3"
+  mkdir -p ~/.local/share/themes/"$3"/kitty
+  mkdir -p ~/.local/share/themes/"$3"/hypr
+  if [[ -z "$3" ]]; then
+    echo "err: no 3rd arg"
+    exit 1
+  else
+    cat >~/.local/share/themes/"$3"/kitty/theme.conf <<-EOF
+		background #000000
+		foreground ${kolors[1]}
+		cursor ${kolors[2]}
+		selection_background ${kolors[3]}
+		color0 ${kolors[4]}
+		color1 ${kolors[5]}
+		color2 ${kolors[6]}
+		color3 ${kolors[7]}
+		color4 ${kolors[8]}
+		color5 ${kolors[9]}
+		color6 ${kolors[0]}
+		color7 ${kolors[1]}
+		color8 ${kolors[2]}
+		color9 ${kolors[3]}
+		color10 ${kolors[4]}
+		color11 ${kolors[5]}
+		color12 ${kolors[6]}
+		color13 ${kolors[7]}
+		color14 ${kolors[8]}
+		color15 ${kolors[9]} 
+EOF
+    echo "exec = swww img $HOME/wall/$chose -t center" >~/.local/share/themes/"$3"/hypr/wall.conf
+  fi
+  ;;
+"help")
+  echo '
+  Commands:
+    ls - lists themes in $HOME/.local/share/themes
+    make - makes a theme based on an image
+    lscmd - prints this menu
+    [nothing] - sets desired theme
+'
+  ;;
+*)
+  echo "Setting Themes..."
+  cp -f "$DIR/$THEME/kitty/theme.conf" "$HOME/.config/kitty/themes"
+  cp -f "$DIR/$THEME/hypr/wall.conf" "$HOME/.config/hypr/wall"
+  if [[ $? -ne 0 ]]; then
+    echo "there was one or more errors, please try again"
+  else
+    hyprctl reload
+    kill -SIGUSR1 $(pgrep kitty)
+    echo "theme set!"
+  fi
+  ;;
+esac
