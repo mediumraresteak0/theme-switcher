@@ -7,7 +7,7 @@ A theme switcher i made for hyprland
 * hyprland
 
 ## the file directories
-The set-theme script look in the directory: ~/.local/share/themes
+The set-theme script looks in the directory: ~/.local/share/themes
 
 The themes in the directory should have two folders = hypr & kitty
 
