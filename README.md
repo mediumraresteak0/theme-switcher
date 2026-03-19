@@ -39,7 +39,7 @@ and this for the kitty conf:
 include ~/.config/kitty/themes/theme.conf #if you have a theme.conf file there if you set a theme
 ```
 ## must do's
-
+* the color-get script might not return 10 colors, so you have to manually add colors if that happens
 * put the color-get and set-theme scripts in /usr/bin/, the make command on set-theme depends on the color-get script
 
 ## ok thats it, i hope you have fun!
