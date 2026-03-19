@@ -21,7 +21,7 @@ The themes in the directory should have two folders = hypr & kitty
 The set-theme script has a command called "make", it has two arguments to it: picture, theme-name
 
 * picture - path to a valid img file (png, jpg, etc.)
-* theme-name - the name of the theme
+* name-of-theme - the name of the theme
 a `set-theme make` command should look like this:
 ```
 set-theme make /path/to/pic.png [name-of-theme]
