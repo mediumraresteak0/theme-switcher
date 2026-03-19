@@ -24,13 +24,13 @@ The set-theme script has a command called "make", it has two arguments to it: pi
 * theme-name - the name of the theme
 a `set-theme make` command should look like this:
 ```
-set-theme make /path/to/pic.png name-of-theme
+set-theme make /path/to/pic.png [name-of-theme]
 ```
-run this command before doing `set-theme make`
+run this command before doing `set-theme make`:
 ```
-mkdir -p ~/.config/hypr/wall ~/.config/kitty/themes
+mkdir -p ~/.config/hypr/wall ~/.config/kitty/themes ~/wall
 ```
-and add this to our hyprland conf:
+and add this to your hyprland conf:
 ```
 source = ~/.config/hypr/wall/wall.conf #if you have a wall.conf there if you set a theme
 ```
