@@ -41,7 +41,7 @@ EOF
   ;;
 *)
   if [[ ! -d "$THEME_DIR"/"$THEME" ]]; then
-    notify-send "Theme not found: $THEME"
+    notify-send "Theme not found: $THEME" # fuck you bitch
     exit 1
   fi
 
@@ -56,9 +56,7 @@ EOF
 
   mainwall=$(ls "$THEME_DIR"/"$THEME"/wallpapers | sort | head -1) #get mainwall
 
-  color-get $mainwall # extract the colors of the main bg; fuck you bitch
-
-  echo "$THEME" >~/.local/share/curr.txt
+ # echo "$THEME" >~/.local/share/curr.txt # ignore this shit
 
   swww img "$COPY_PATH"/wallpapers/"$mainwall" -t center
 
