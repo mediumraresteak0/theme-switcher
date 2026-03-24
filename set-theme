@@ -1,0 +1,88 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+  notify-send "NO 1ST ARG"
+  exit 1
+fi
+
+THEME="$1"
+THEME_DIR="$HOME/.local/share/themes"
+COPY_PATH="$HOME/.local/share/current-theme"
+
+case "$THEME" in
+"ls")
+  ls ~/.local/share/themes/
+  ;;
+"background")
+  select=$(ls "$COPY_PATH"/wallpapers | sort | rofi -dmenu -p "Wallpapers")
+  swww img "$COPY_PATH"/wallpapers/"$select" -t center
+  coltab=($(color-get "$COPY_PATH"/wallpapers/"$select"))
+  cat >~/.config/kitty/themes/theme.conf <<-EOF
+  color0 ${coltab[0]}
+  color1 ${coltab[1]}
+  color2 ${coltab[2]}
+  color3 ${coltab[3]}
+  color4 ${coltab[4]}
+  color5 ${coltab[5]}
+  color6 ${coltab[6]}
+  color7 ${coltab[7]}
+  color8 ${coltab[8]}
+  color9 ${coltab[9]}
+  color10 ${coltab[0]}
+  color11 ${coltab[1]}
+  color12 ${coltab[2]}
+  color13 ${coltab[3]}
+  color14 ${coltab[4]}
+  color15 ${coltab[5]}
+EOF
+  hyprctl reload
+  swww img "$COPY_PATH"/wallpapers/"$select" -t center
+  kill -SIGUSR1 $(pgrep kitty)
+  ;;
+*)
+  if [[ ! -d "$THEME_DIR"/"$THEME" ]]; then
+    notify-send "Theme not found: $THEME"
+    exit 1
+  fi
+
+  rm -rf "$COPY_PATH"/* 2>/dev/null
+
+  cp -r "$THEME_DIR"/"$THEME"/* "$COPY_PATH" 2>/dev/null
+
+  if [[ $? -ne 0 ]]; then
+    notify-send "Failed to copy theme to $COPY_PATH"
+    exit 1
+  fi
+
+  mainwall=$(ls "$THEME_DIR"/"$THEME"/wallpapers | sort | head -1) #get mainwall
+
+  color-get $mainwall # extract the colors of the main bg; fuck you bitch
+
+  echo "$THEME" >~/.local/share/curr.txt
+
+  swww img "$COPY_PATH"/wallpapers/"$mainwall" -t center
+
+  coltab=($(color-get "$COPY_PATH"/wallpapers/"$mainwall"))
+  cat >~/.config/kitty/themes/theme.conf <<-EOF
+  color0 ${coltab[0]}
+  color1 ${coltab[1]}
+  color2 ${coltab[2]}
+  color3 ${coltab[3]}
+  color4 ${coltab[4]}
+  color5 ${coltab[5]}
+  color6 ${coltab[6]}
+  color7 ${coltab[7]}
+  color8 ${coltab[8]}
+  color9 ${coltab[9]}
+  color10 ${coltab[0]}
+  color11 ${coltab[1]}
+  color12 ${coltab[2]}
+  color13 ${coltab[3]}
+  color14 ${coltab[4]}
+  color15 ${coltab[5]}
+EOF
+  hyprctl reload
+
+  kill -SIGUSR1 $(pgrep kitty)
+  ;;
+esac
