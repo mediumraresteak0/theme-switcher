@@ -1,3 +1,3 @@
 #!/bin/bash
-
-magick "$1" -alpha off -colors 10 -format "%c" histogram:info: | awk '{print $3}' # i tried my best to make it fast :(
+#optimized the hell out of it
+magick "$1" -alpha off -resize 200x200 -colors 15 +dither -depth 8 -unique-colors -format '%c' histogram:info: | sort -n | awk '{print $3}'
