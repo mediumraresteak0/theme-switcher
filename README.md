@@ -3,7 +3,7 @@
 # A theme switcher in bash for hyprland
 
 ## Dependencies
-* swww (or awww, just change the code when you clone the repo)
+* awww
 * hyprland
 * kitty
 * rofi
@@ -12,6 +12,7 @@
 
 ## Do this
 * make directories > ~/.local/share/themes and ~/.local/share/current-theme
+* make a colors.css file in your waybar config and include that file in your waybar style.css
 * put scripts set-theme and color-get in /usr/bin/bash
 
 ## How to make themes
