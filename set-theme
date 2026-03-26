@@ -1,0 +1,124 @@
+#!/bin/bash
+
+# Copyright (c) 2026 Karlos Rafael. All Rights Reserved. < copyright or sum shit lol
+# ts code made me rage 2 billion times
+
+if [[ -z "$1" ]]; then
+  notify-send "No 1st arg"
+  exit 1
+fi
+
+THEME="$1"
+THEME_DIR="$HOME/.local/share/themes"
+COPY_PATH="$HOME/.local/share/current-theme"
+
+case "$THEME" in
+"ls")
+  ls ~/.local/share/themes/
+  ;;
+"background")
+  select=$(ls "$COPY_PATH"/wallpapers | while read A; do echo -en "$A\x00icon\x1f"$COPY_PATH"/wallpapers/$A\n"; done | rofi -dmenu -p " Wallpapers")
+  if [[ -z "$select" ]]; then
+    notify-send "No wallpapers selected"
+    exit 1
+  else
+    awww img "$COPY_PATH"/wallpapers/"$select" -t wave --transition-wave 20,20 --transition-angle 225
+    notify-send "Wallpaper applied!: $select"
+    coltab=($(color-get "$COPY_PATH"/wallpapers/"$select"))
+    cat >~/.config/kitty/themes/theme.conf <<-EOF
+    foreground ${coltab[6]}
+    cursor ${coltab[7]}
+    color0 ${coltab[0]}
+    color1 ${coltab[1]}
+    color2 ${coltab[2]}
+    color3 ${coltab[3]}
+    color4 ${coltab[4]}
+    color5 ${coltab[5]}
+    color6 ${coltab[6]}
+    color7 ${coltab[7]}
+    color8 ${coltab[8]}
+    color9 ${coltab[9]}
+    color10 ${coltab[0]}
+    color11 ${coltab[1]}
+    color12 ${coltab[2]}
+    color13 ${coltab[3]}
+    color14 ${coltab[4]}
+    color15 ${coltab[5]}
+EOF
+    cat >~/.config/waybar/colors.css <<-EOF
+@define-color  c0 ${coltab[0]};
+@define-color  c1 ${coltab[1]};
+@define-color  c2 ${coltab[2]};
+@define-color  c3 ${coltab[3]};
+@define-color  c4 ${coltab[4]};
+@define-color  c5 ${coltab[5]};
+@define-color  c6 ${coltab[6]};
+@define-color  c7 ${coltab[7]};
+@define-color  c8 ${coltab[8]};
+@define-color  c9 ${coltab[9]};
+EOF
+
+    hyprctl reload
+    pkill -SIGUSR2 waybar
+    kill -SIGUSR1 $(pgrep kitty)
+  fi
+  ;;
+*)
+  if [[ ! -d "$THEME_DIR"/"$THEME" ]]; then
+    notify-send "Theme not found: $THEME"
+    exit 1
+  fi
+
+  rm -rf "$COPY_PATH"/* 2>/dev/null
+
+  cp -r "$THEME_DIR"/"$THEME"/* "$COPY_PATH" 2>/dev/null
+
+  if [[ $? -ne 0 ]]; then
+    notify-send "Failed to copy theme to $COPY_PATH"
+    exit 1
+  fi
+
+  mainwall=$(ls "$THEME_DIR"/"$THEME"/wallpapers | sort | head -1) #get mainwall
+
+  echo "$THEME" >~/.local/share/curr.txt
+
+  awww img "$COPY_PATH"/wallpapers/"$mainwall" -t wave --transition-wave 20,20 --transition-angle 45
+  notify-send "Theme applied!: $THEME"
+  coltab=($(color-get "$COPY_PATH"/wallpapers/"$mainwall"))
+  cat >~/.config/kitty/themes/theme.conf <<-EOF
+  cursor ${coltab[7]}
+  color0 ${coltab[0]}
+  color1 ${coltab[1]}
+  color2 ${coltab[2]}
+  color3 ${coltab[3]}
+  color4 ${coltab[4]}
+  color5 ${coltab[5]}
+  color6 ${coltab[6]}
+  color7 ${coltab[7]}
+  color8 ${coltab[8]}
+  color9 ${coltab[9]}
+  color10 ${coltab[0]}
+  color11 ${coltab[1]}
+  color12 ${coltab[2]}
+  color13 ${coltab[3]}
+  color14 ${coltab[4]}
+  color15 ${coltab[5]}
+EOF
+  cat >~/.config/waybar/colors.css <<-EOF
+@define-color  c0 ${coltab[0]};
+@define-color  c1 ${coltab[1]};
+@define-color  c2 ${coltab[2]};
+@define-color  c3 ${coltab[3]};
+@define-color  c4 ${coltab[4]};
+@define-color  c5 ${coltab[5]};
+@define-color  c6 ${coltab[6]};
+@define-color  c7 ${coltab[7]};
+@define-color  c8 ${coltab[8]};
+@define-color  c9 ${coltab[9]};
+EOF
+
+  hyprctl reload
+  pkill -SIGUSR2 waybar
+  kill -SIGUSR1 $(pgrep kitty)
+  ;;
+esac
