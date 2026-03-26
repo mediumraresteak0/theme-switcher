@@ -3,7 +3,7 @@
 # A theme switcher in bash for hyprland
 
 ## Dependencies
-* sww
+* sww (or awww, just change the code when you clone the repo)
 * hyprland
 * kitty
 * rofi
