@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+shl=$(if [[ $(basename $SHELL) = "fish" ]]; then echo -e "\e[96m<><\e[0m"; elif [[ $(basename $SHELL) = "bash" ]]; then echo -e "\e[96m\e[0m"; else echo "$(basename $SHELL)"; fi)
+usr=$(echo -e "\e[90m$USER\e[0m")
+distro=$(echo -e "\e[92m$(grep '^NAME=' /etc/os-release | cut -d'"' -f2 | awk '{print $1}')\e[0m")
+hname=$(echo -e "\e[91m$(uname -n)\e[0m")
+kernel=$(echo -e "\e[93m$(uname -r)\e[0m")
+date=$(echo -e "\e[94m$(date +%D)\e[0m")
+ram=$(echo -e "\e[95m$(free -m | head -2 | awk '{print $2 " MB"}' | tail -n1)\e[0m")
+disk=$(df -h / | tail -n 1 | awk '{print $3 / $2}')
+colors=$(echo -e "\e[90m• \e[91m• \e[92m• \e[93m• \e[94m• \e[95m• \e[96m• \e[97m• \e[98m• \e[99m• \e[0m")
+
+ucon=$(echo -e "\e[90m\e[0m")
+hcon=$(echo -e "\e[91m\e[0m")
+dcon=$(echo -e "\e[92m󰻀\e[0m")
+kcon=$(echo -e "\e[93m󰌢\e[0m")
+dcan=$(echo -e "\e[94m🗓\e[0m")
+rcon=$(echo -e "\e[95m󰍛\e[0m")
+scon=$(echo -e "\e[96m\e[0m")
+
+figlet $(grep '^NAME=' /etc/os-release | cut -d'"' -f2 | awk '{print $1}')
+cat <<-EOF
+┌──────────┐
+│ $ucon User   │ $usr
+│ $hcon Hname  │ $hname
+│ $dcon Distro │ $distro
+│ $kcon Kernel │ $kernel
+│ $dcan Date   │ $date
+│ $rcon RAM    │ $ram
+│ $scon Shell  │ $shl
+└──────────┘
+$colors
+EOF
